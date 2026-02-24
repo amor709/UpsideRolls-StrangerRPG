@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UpsideRolls{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">
+            <a href="/">UpsideRolls</a>
+            <span class="nav-subtitle">Stranger RPG</span>
+        </div>
+
+        <div class="nav-toggle" id="nav-toggle">
+            <i class="bi bi-list"></i>
+        </div>
+
+        <div class="nav-links" id="nav-links">
+            {% if user.is_authenticated %}
+                <span class="nav-user">{{ user.username }}</span>
+                <a href="{% url 'accounts:logout' %}">Salir</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Login</a>
+                <a href="{% url 'accounts:registro' %}">Registro</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© 2026 UpsideRolls - Stranger RPG</div>
+            <div class="footer-center">Desarrollado por Luis, Alexander y Lucas</div>
+            <div class="footer-right">
+                <a href="https://github.com/amor709/UpsideRolls-StrangerRPG" class="footer-link github">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://github.com/amor709/UpsideRolls-StrangerRPG" class="footer-link docs">
+                    <i class="bi bi-folder-fill"></i> Documentación
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const toggle = document.getElementById('nav-toggle');
+        const links = document.getElementById('nav-links');
+
+        toggle.addEventListener('click', () => {
+            links.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                links.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
