@@ -4,48 +4,19 @@
 **No usar ninguna de las credenciales de ejemplo**
 
 
-### Paso 1 - Crear entorno virtual
+### Paso 1 - Revisar la instalación de Docker en tu sistema
 ```
-python -m venv venv
-```
-### Paso 2 - Activar entorno virtua
-```
-source venv/bin/activate
-```
-### Paso 3 - Instalar las dependencias
-
-Ejectuamos el siguiente comando en nuestro entorno virtual
-```
-pip install -r requirements.txt
+docker --version
+docker compose version
 ```
 
-### Paso 4 - Instalar PostgreSQL en el sistema
+### Paso 2 - Creamos un archivo .env para nuestras variables de entorno
 
 ```
-sudo apt update
-sudo apt install postgresql postgresql-contrib
-```
-Verificar que está activo:
-```
-sudo systemctl status postgresql
-```
+POSTGRES_DB=db_ejemplo
+POSTGRES_USER=usuario_ejemplo
+POSTGRES_PASSWORD=1234
 
-### Paso 5 - Entrar como superusuario de PostgreSQL
-```
-sudo -u postgres psql
-```
-### Paso 6 - Crear usuario para Django
-```
-CREATE USER usuario_ejemplo WITH PASSWORD '1234';
-```
-### Paso 7 – Crear base de datos con owner
-```
-CREATE DATABASE db_ejemplo OWNER usuario_ejemplo;
-```
-
-### Paso 8 - Creamos un archivo .env para nuestras variables de entorno
-
-```
 DB_NAME=db_ejemplo
 DB_USER=usuario_ejemplo
 DB_PASSWORD=1234
@@ -55,7 +26,14 @@ SECRET_KEY=clave_secreta
 DEBUG=True
 ```
 
-### Paso 9 - Aplicar migraciones
+
+### Paso 4 - Construir y levantar los contenedores
 ```
-python manage.py migrate
+docker compose up --build
 ```
+
+### Paso 5 - Acceder a la aplicación
+```
+http://localhost:8000
+```
+
