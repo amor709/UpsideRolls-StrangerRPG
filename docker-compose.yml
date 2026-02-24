@@ -19,7 +19,11 @@ services:
       python manage.py runserver 0.0.0.0:8000"
     restart: unless-stopped  # Asegura que el contenedor se reinicie si falla
 
-
+  lint:
+    build: .
+    command: pylint --rcfile=/app/pylint.yml $(git ls-files '*.py')
+    volumes:
+      - .:/app
 
   db:
     image: postgres:16
