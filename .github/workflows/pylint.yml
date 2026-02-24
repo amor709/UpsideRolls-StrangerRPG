@@ -18,4 +18,4 @@ jobs:
         run: docker-compose build
 
       - name: Run Pylint inside Docker
-        run: docker-compose run --rm lint
+        run: docker compose run --rm lint
