@@ -40,4 +40,3 @@ class RegistroAccionAdmin(admin.ModelAdmin):
     list_filter = ['tipo_accion', 'campana', 'exito', 'fecha']
     search_fields = ['campana__titulo', 'usuario__username']
     date_hierarchy = 'fecha'
-    inlines = [RegistroAccionInline]
