@@ -1,14 +1,13 @@
 # views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Campana, Personaje, Enemigo, RegistroAccion
 from .forms import CampanaForm, PersonajeForm, EnemigoForm
 from .mixins import SoloPropietarioMixin, SoloDMMixin
 import random
-from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
 class CampanaView(LoginRequiredMixin, TemplateView):
