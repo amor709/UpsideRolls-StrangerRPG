@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Campaña{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if campana %}
+        <h2>{{ campana.titulo }}</h2>
+        <p>{{ campana.descripcion }}</p>
+        <p><strong>DM:</strong> {{ campana.dm.username }}</p>
+        <p><strong>Estado:</strong> {{ campana.get_estado_display }}</p>
+        {% if user == campana.dm %}
+            <a href="{% url 'game:campana_update' %}" class="btn btn-primary">Editar campaña</a>
+            <a href="{% url 'game:campana_delete' %}" class="btn btn-primary">Borrar campaña</a>
+        {% endif %}
+
+    {% else %}
+        <p>No hay campaña creada por el momento.</p>
+        <a href="{% url 'game:campana_create' %}" class="btn btn-success">Crear campaña</a>
+    {% endif %}
+</div>
+{% endblock %}

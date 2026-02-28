@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+{% block title %}Batalla{% endblock %}
+{% block content %}
+<h2>Batalla - {{ campana.titulo }}</h2>
+<h3>Enemigos</h3>
+<ul>
+{% for enemigo in enemigos %}
+<li>{{ enemigo.nombre }} (Vida: {{ enemigo.vida }})</li>
+{% empty %}
+<li>No hay enemigos.</li>
+{% endfor %}
+</ul>
+<h3>Jugadores</h3>
+<ul>
+{% for jugador in jugadores %}
+<li>{{ jugador.username }}</li>
+{% endfor %}
+</ul>
+<form method="post">
+{% csrf_token %}
+<label>Tipo de acción:</label>
+<select name="tipo_accion">
+<option value="ataque">Ataque</option>
+<option value="curacion">Curación</option>
+</select>
+<label>Objetivo (ID):</label>
+<input type="number" name="objetivo" required>
+<label>Dado:</label>
+<select name="tipo_dado">
+<option value="d6">d6</option>
+<option value="d8">d8</option>
+<option value="d10">d10</option>
+<option value="d12">d12</option>
+<option value="d20">d20</option>
+</select>
+<label>Modificador:</label>
+<input type="number" name="modificador" value="0">
+<button type="submit" class="btn btn-danger">Ejecutar Acción</button>
+</form>
+{% endblock %}

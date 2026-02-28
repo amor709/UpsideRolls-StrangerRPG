@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Personajes{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Personajes de la campaña</h2>
+    {% if object_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Clase</th>
+                    <th>Nivel</th>
+                    <th>Vida</th>
+                    <th>Propietario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for personaje in object_list %}
+                    <tr>
+                        <td>{{ personaje.nombre }}</td>
+                        <td>{{ personaje.clase }}</td>
+                        <td>{{ personaje.nivel }}</td>
+                        <td>{{ personaje.vida_actual }} / {{ personaje.vida_maxima }}</td>
+                        <td>{{ personaje.propietario.username }}</td>
+                        <td>
+                            {% if user == personaje.propietario %}
+                                <a href="{% url 'game:personaje_update' personaje.id %}" class="btn btn-primary btn-sm">Editar</a>
+                                <a href="{% url 'game:personaje_delete' personaje.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay personajes aún. <a href="{% url 'game:personaje_create' %}">Crear personaje</a></p>
+    {% endif %}
+    <a href="{% url 'game:personaje_create' %}" class="btn btn-success mt-2">Crear Personaje</a>
+</div>
+{% endblock %}

@@ -67,7 +67,7 @@ class Personaje(models.Model):
 
     def clean(self):
         if self.vida_actual > self.vida_maxima:
-            raise ValidationError("Vida actual no puede superar máxima.") [web:17]
+            raise ValidationError("Vida actual no puede superar máxima.")
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -136,3 +136,5 @@ class RegistroAccion(models.Model):
 
     def __str__(self):
         return f"{self.tipo_accion}: {self.total}"
+
+

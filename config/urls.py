@@ -26,5 +26,4 @@ urlpatterns = [
 
     # Incluye todas las URLs de accounts
     path('accounts/', include('accounts.urls')),
-    path('game/', include('game.urls', namespace='game')),
 ]
