@@ -15,7 +15,7 @@
         {% endif %}
         <a href="{% url 'game:personaje_list' %}" class="btn btn-primary">Personajes</a>
         <a href="{% url 'game:batalla' %}" class="btn btn-primary">A la batalla</a>
-
+        <a href="{% url 'game:stats_campana' campana.pk %}" class="btn btn-info">Ver estadísticas</a>
 
 
     {% else %}
