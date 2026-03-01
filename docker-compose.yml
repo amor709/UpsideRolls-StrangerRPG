@@ -16,8 +16,9 @@ services:
     command: >
       sh -c "sleep 10 &&
       python manage.py migrate &&
+      python create_superuser.py &&
       python manage.py runserver 0.0.0.0:8000"
-    restart: unless-stopped  # Asegura que el contenedor se reinicie si falla
+    restart: unless-stopped  
 
   db:
     image: postgres:16
@@ -36,8 +37,8 @@ services:
     volumes:
       - ./data:/data
     ports:
-      - "8025:8025" # Interfaz web
-      - "1025:1025" # SMTP de prueba
+      - "8025:8025" 
+      - "1025:1025" 
     environment:
       MP_MAX_MESSAGES: 5000
       MP_DATABASE: /data/mailpit.db

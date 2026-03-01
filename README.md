@@ -1,6 +1,6 @@
 # UpsideRolls: StrangerRPG Documentación
 
-## Descripción breve del proyecto
+Os presentamos UpsideRolls: StrangerRPG. Un juego de rol donde un Director de Campaña (DM) guía la historia y los jugadores crean personajes para participar en aventuras. Permite crear campañas, gestionar personajes y enemigos, y simular combates usando dados virtuales. La aplicación registra todas las acciones y genera estadísticas de la partida.
 
 ## Instalación
 **No usar ninguna de las credenciales de ejemplo**
@@ -15,6 +15,10 @@ docker compose version
 ### Paso 2 - Creamos un archivo .env para nuestras variables de entorno
 
 ```
+DJANGO_SUPERUSER_NAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=admin123
+
 POSTGRES_DB=db_ejemplo
 POSTGRES_USER=usuario_ejemplo
 POSTGRES_PASSWORD=1234
@@ -101,7 +105,7 @@ Si decidimos atacar, podremos:
 - Elegir qué tipo de dados usar.
 - Escoger el modificador.
 
-![atarcar-enemigo](docs/img/atarcar-enemigo.png)
+![atacar-enemigo](docs/img/atarcar-enemigo.png)
 
 Al hacer clic en **Ejecutar**, los dados se lanzarán y determinarán el daño que hacemos al enemigo.
 El turno del enemigo se ejecutará al mismo tiempo que el nuestro.
