@@ -131,3 +131,6 @@ STATICFILES_DIRS = [
 
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'campana_list'
+LOGOUT_REDIRECT_URL = 'accounts:login'

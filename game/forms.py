@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from .models import PerfilJugador, Campana, Personaje, Enemigo, RegistroAccion
+from .models import Campana
 
 User = get_user_model()
 
@@ -26,55 +27,44 @@ class PerfilJugadorForm(forms.ModelForm):
             return self.user
         raise ValidationError("Usuario requerido para crear perfil.")
 
+
 class CampanaForm(forms.ModelForm):
     class Meta:
         model = Campana
-        fields = ['titulo', 'descripcion', 'estado']
+        fields = ['titulo', 'descripcion', 'estado', 'dm']
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'estado': forms.Select(attrs={'class': 'form-control'}),
+            'dm': forms.Select(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
-        self.instance = kwargs.get('instance')
         super().__init__(*args, **kwargs)
+        self.fields['dm'].queryset = User.objects.filter(is_active=True)
         if self.user:
             self.fields['dm'].initial = self.user
-            self.fields['dm'].widget = forms.HiddenInput()
 
     def clean_dm(self):
         dm = self.cleaned_data.get('dm')
-        if self.user and dm != self.user:
-            raise ValidationError("Solo puedes ser DM de tus propias campañas.")
+        if dm and Campana.objects.exclude(pk=self.instance.pk).filter(dm=dm).exists():
+            raise ValidationError(f"{dm.username} ya es DM de otra campaña.")
         return dm
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if self.instance and self.user and self.instance.dm != self.user:
-            raise ValidationError("No puedes editar campañas que no diriges.")
-        return cleaned_data
+
 
 class PersonajeForm(forms.ModelForm):
     class Meta:
         model = Personaje
-        fields = ['nombre', 'campana', 'vida_maxima', 'vida_actual', 'clase', 'nivel']
+        fields = ['nombre', 'vida_maxima', 'vida_actual', 'clase', 'nivel']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'campana': forms.Select(attrs={'class': 'form-control'}),
             'vida_maxima': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'vida_actual': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'clase': forms.TextInput(attrs={'class': 'form-control'}),
             'nivel': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 20}),
         }
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        if self.user:
-            self.fields['propietario'].initial = self.user
-            self.fields['propietario'].widget = forms.HiddenInput()
 
     def clean_vida_actual(self):
         vida_actual = self.cleaned_data['vida_actual']
@@ -91,22 +81,21 @@ class PersonajeForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        campana = cleaned_data.get('campana')
-        propietario = self.user
         nombre = cleaned_data.get('nombre')
-
-        if campana and propietario and not campana.jugadores.filter(id=propietario.id).exists():
-            self.add_error('campana', "Debes participar en la campaña para crear un personaje.")
-
-        if campana and nombre and Personaje.objects.filter(nombre=nombre, campana=campana).exists():
-            self.add_error('nombre', "Ya existe un personaje con ese nombre en esta campaña.")
-
+        campana = Campana.objects.first()
+        if campana and nombre:
+            qs = Personaje.objects.filter(nombre=nombre, campana=campana)
+            if self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                self.add_error('nombre', "Ya existe un personaje con ese nombre en esta campaña.")
         return cleaned_data
+
 
 class EnemigoForm(forms.ModelForm):
     class Meta:
         model = Enemigo
-        fields = ['nombre', 'vida', 'dificultad', 'tipo', 'nota_narrativa']
+        fields = ['nombre', 'vida', 'dificultad', 'tipo', 'nota_narrativa', 'campana']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'vida': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
@@ -118,19 +107,10 @@ class EnemigoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.campana = kwargs.pop('campana', None)
         super().__init__(*args, **kwargs)
-        if self.campana:
+        if self.campana and 'campana' in self.fields:
             self.fields['campana'].initial = self.campana
             self.fields['campana'].widget = forms.HiddenInput()
 
-    def clean(self):
-        cleaned_data = super().clean()
-        campana = self.campana or cleaned_data.get('campana')
-        nombre = cleaned_data.get('nombre')
-
-        if campana and nombre and Enemigo.objects.filter(nombre=nombre, campana=campana).exists():
-            self.add_error('nombre', "Ya existe un enemigo con ese nombre en esta campaña.")
-
-        return cleaned_data
 
 class RegistroAccionForm(forms.ModelForm):
     class Meta:

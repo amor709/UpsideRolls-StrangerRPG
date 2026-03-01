@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from game import urls as game_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +27,5 @@ urlpatterns = [
 
     # Incluye todas las URLs de accounts
     path('accounts/', include('accounts.urls')),
-    path('game/', include('game.urls', namespace='game')),
+    path("", include("game.urls")),
 ]

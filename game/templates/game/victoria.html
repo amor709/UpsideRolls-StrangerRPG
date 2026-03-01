@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Victoria | UpsideRolls{% endblock %}
+
+{% block content %}
+
+<div class="victory-box">
+    <h1>¡VICTORIA!</h1>
+    <p>Todos los enemigos han sido derrotados.</p>
+
+    <a href="{% url 'game:campana' %}" class="btn-primary">
+        Volver a la campaña
+    </a>
+</div>
+
+{% endblock %}

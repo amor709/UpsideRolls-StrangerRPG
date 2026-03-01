@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Batalla | UpsideRolls{% endblock %}
+
+{% block content %}
+
+<h1>Batalla activa</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="battle-info">
+    <p><strong>Turno actual:</strong> {{ campana.turno_actual }}</p>
+</div>
+
+{% if turno_usuario %}
+    <div class="turn-box">
+        <h2>Turno de {{ turno_usuario.nombre }}</h2>
+
+        {% if request.user == turno_usuario.propietario %}
+            <form method="post" class="battle-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Acción</label>
+                    <select name="accion" id="accion-select" required>
+                        <option value="ataque">Atacar enemigo</option>
+                        <option value="curacion">Curarse a sí mismo</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="enemigo-select">
+                    <label>Selecciona enemigo</label>
+                    <select name="enemigo">
+                        {% for enemigo in enemigos %}
+                            <option value="{{ enemigo.id }}">
+                                {{ enemigo.nombre }} (Vida: {{ enemigo.vida }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de dado</label>
+                    <select name="tipo_dado">
+                        <option value="d6">d6</option>
+                        <option value="d8">d8</option>
+                        <option value="d10">d10</option>
+                        <option value="d12">d12</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Modificador</label>
+                    <input type="number" name="modificador" value="0">
+                </div>
+
+                <button type="submit" class="btn-primary">Ejecutar</button>
+            </form>
+
+            <script>
+                const accionSelect = document.getElementById('accion-select');
+                const enemigoDiv = document.getElementById('enemigo-select');
+
+                function toggleEnemigoSelect() {
+                    if (accionSelect.value === 'curacion') {
+                        enemigoDiv.style.display = 'none';
+                    } else {
+                        enemigoDiv.style.display = 'block';
+                    }
+                }
+
+                accionSelect.addEventListener('change', toggleEnemigoSelect);
+                toggleEnemigoSelect();
+            </script>
+        {% else %}
+            <p>Esperando al jugador...</p>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="turn-box">
+        <h2>Turno de los enemigos</h2>
+        <p>Los enemigos están atacando automáticamente.</p>
+    </div>
+{% endif %}
+
+<hr>
+
+<div class="battle-grid">
+
+    <div class="characters-box">
+        <h2>Personajes</h2>
+        {% for p in personajes %}
+            <div class="card">
+                <strong>{{ p.nombre }}</strong>
+                <p>Vida: {{ p.vida_actual }} / {{ p.vida_maxima }}</p>
+            </div>
+        {% empty %}
+            <p>No hay personajes vivos.</p>
+        {% endfor %}
+    </div>
+
+    <div class="enemies-box">
+        <h2>Enemigos</h2>
+        {% for e in enemigos %}
+            <div class="card">
+                <strong>{{ e.nombre }}</strong>
+                <p>Vida: {{ e.vida }}</p>
+            </div>
+        {% empty %}
+            <p>No hay enemigos vivos.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+<hr>
+
+<div class="historial-box">
+    <h2>Historial de combate</h2>
+
+    {% if historial %}
+        <ul class="historial-list">
+            {% for accion in historial %}
+                <li>
+                    {% if accion.usuario %}
+                        <strong>{{ accion.usuario.username }}</strong>
+                    {% elif accion.enemigo %}
+                        <strong>{{ accion.enemigo.nombre }}</strong>
+                    {% else %}
+                        <strong>Enemigo</strong>
+                    {% endif %}
+
+                    lanzó {{ accion.tipo_dado }}
+                    ({{ accion.resultado_dado }}{% if accion.modificador %}+{{ accion.modificador }}{% endif %})
+                    → Total: {{ accion.total }}
+
+                    {% if accion.tipo_accion == 'ataque' %}
+                        hizo {{ accion.dano_curacion }} de daño
+                        {% if accion.enemigo and accion.usuario %}
+                            a {{ accion.enemigo.nombre }}
+                        {% elif accion.personaje %}
+                            a {{ accion.personaje.nombre }}
+                        {% endif %}
+                    {% elif accion.tipo_accion == 'curacion' %}
+                        curó {{ accion.dano_curacion }} puntos
+                        {% if accion.personaje %}
+                            a {{ accion.personaje.nombre }}
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay acciones registradas.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -40,6 +40,9 @@ class Campana(models.Model):
     )
     estado = models.CharField(max_length=20, choices=ESTADOS, default='activa')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    turno_actual = models.CharField(max_length=20, default='personajes')
+    indice_turno = models.IntegerField(default=0)
+    batalla_activa = models.BooleanField(default=True)
 
     def __str__(self):
         return self.titulo
@@ -67,7 +70,7 @@ class Personaje(models.Model):
 
     def clean(self):
         if self.vida_actual > self.vida_maxima:
-            raise ValidationError("Vida actual no puede superar máxima.") [web:17]
+            raise ValidationError("Vida actual no puede superar máxima.")
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -136,3 +139,5 @@ class RegistroAccion(models.Model):
 
     def __str__(self):
         return f"{self.tipo_accion}: {self.total}"
+
+

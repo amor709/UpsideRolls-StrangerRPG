@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Campaña - UpsideRolls{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Crear Nueva Campaña</h1>
+    <form method="post" class="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_nombre">Nombre de la Campaña:</label>
+            {{ form.nombre }}
+        </div>
+        <div class="form-group">
+            <label for="id_descripcion">Descripción:</label>
+            {{ form.descripcion }}
+        </div>
+        <div class="form-group">
+            <label for="id_mundo">Mundo:</label>
+            {{ form.mundo }}
+        </div>
+        <div class="form-group">
+            <label for="id_personajes">Personajes:</label>
+            {{ form.personajes }}
+        </div>
+        <button type="submit" class="btn">Crear Campaña</button>
+    </form>
+</div>
+{% endblock %}
