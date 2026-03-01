@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'game.middleware.RegistroAccesoCampanaMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

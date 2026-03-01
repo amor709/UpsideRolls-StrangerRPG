@@ -9,6 +9,7 @@ from .mixins import SoloPropietarioMixin, SoloDMMixin
 import random
 from django.contrib.auth.decorators import login_required
 
+
 class CampanaView(LoginRequiredMixin, TemplateView):
     template_name = 'game/campana.html'
 
