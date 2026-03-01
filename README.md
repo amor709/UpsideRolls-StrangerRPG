@@ -43,6 +43,87 @@ http://localhost:8000
 
 ## Vamos, pruebalo por ti mismo!
 
+Ya que te has interesado lo suficiente como para llegar hasta aquí vamos a hacer una pequeña guía para que entiendas cómo funciona la aplicación.
+
+Primero, al ingresar al enlace desde tu navegador, encontrarás la pantalla de inicio de sesión.
+
+![inicio-login](docs/img/inicio-login.png)
+
+Seguramente ya estás familiarizado con esta dinámica.
+Si ya tienes una cuenta, simplemente inicia sesión con tus datos.
+Si no la tienes, haz clic en **“Registro”** (arriba a la derecha) o en **“Regístrate”** justo debajo del botón de **“Entrar”**.
+
+Supongamos que somos completamente nuevos.
+
+![registro](docs/img/registro.png)
+
+Procedemos a rellenar los campos que nos solicita el formulario y pulsamos en **“Unirse”**.
+
+¡Y ya estaría! Ya tenemos la cuenta creada. La aplicación nos redirigirá directamente a nuestra página principal.
+
+![no-campana](docs/img/no-campana.png)
+
+Aquí veremos que todavía no tenemos ninguna campaña creada, así que, ¿a qué esperamos? ¡Vamos a crear una!
+
+Rellenamos ...
+
+![campana-creacion](docs/img/campana-creacion.png)
+
+Ahora que ya la tenemos creada, podemos ir a la Batalla, así que hacemos clic ahí.
+
+![campana-no-pj](docs/img/campana-no-pj.png)
+
+Oh, espera. No tenemos ningún personaje ni ningún enemigo creado para nuestro juego.
+
+Vamos a volver al menú para solucionarlo.
+
+Hacemos clic en **Nuevo Personaje** y aparecerá la pantalla de creación.
+
+Rellenamos los campos. POdemos elegir entre diferentes opciones, como la vida, la clase, etc.
+
+![Personaje-Ejemplo](docs/img/Personaje-Ejemplo.png)
+
+Con nuestro personaje listo, ahora sí, vamos a crear el enemigo.
+
+Rellenamos los campos y lo creamos.
+
+![Enemigo-Ejemplo](docs/img/Enemigo-Ejemplo.png)
+
+¡Ahora sí que sí! Vamos a la batalla.
+
+La dinámica es sencilla.
+
+Lo primero que debemos saber es que tenemos dos tipos de acción:
+- Curarnos a nosotros mismos.
+- Atacar al enemigo.
+
+Si decidimos atacar, podremos:
+- Seleccionar el enemigo que queramos.
+- Elegir qué tipo de dados usar.
+- Escoger el modificador.
+
+![atarcar-enemigo](docs/img/atarcar-enemigo.png)
+
+Al hacer clic en **Ejecutar**, los dados se lanzarán y determinarán el daño que hacemos al enemigo.
+El turno del enemigo se ejecutará al mismo tiempo que el nuestro.
+
+Si optamos por curarnos, podremos recuperar vida según el resultado de los dados.
+Eso si, el enemigo también podrá atacarnos durante esa misma tirada.
+
+![curarse](docs/img/curarse.png)
+
+En la parte inferior de la pantalla tenemos el **historial de combate**, donde quedará registrado todo lo que ha sucedido durante nuestra campaña.
+
+![historial-combate](docs/img/historial-combate.png)
+
+Cuando derrotamos a todos los enemigos, recibiremos una pantalla indicando que han sido eliminados, marcando así el final de la campaña.
+
+![victoria](docs/img/victoria.png)
+
+Y hasta aquí la guía.Espero que te haya gustado y que disfrutes tu aventura.
+
+
+
 ## Estructura del proyecto
 
 ## Documentación del codigo
