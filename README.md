@@ -62,9 +62,11 @@ Procedemos a rellenar los campos que nos solicita el formulario y pulsamos en **
 
 Aquí veremos que todavía no tenemos ninguna campaña creada, así que, ¿a qué esperamos? ¡Vamos a crear una!
 
+![campana-creacion](docs/img/campana-creacion.png)
+
 Rellenamos los campos que nos pide.
 
-![campana-creacion](docs/img/campana-creacion.png)
+![campana-ejemplo](docs/img/campana-ejemplo.png)
 
 Ahora que ya la tenemos creada, podemos ir a la Batalla, así que hacemos clic ahí.
 
@@ -74,7 +76,7 @@ Oh, espera. No tenemos ningún personaje ni ningún enemigo creado para nuestro 
 
 Vamos a volver al menú para solucionarlo.
 
-Hacemos clic en **Nuevo Personaje** y aparecerá la pantalla de creación.
+Hacemos clic en **Personajes**, luego **Crear Personaje** y aparecerá la pantalla de creación.
 
 Rellenamos los campos. POdemos elegir entre diferentes opciones, como la vida, la clase, etc.
 
@@ -117,20 +119,18 @@ Cuando derrotamos a todos los enemigos, recibiremos una pantalla indicando que h
 
 ![victoria](docs/img/victoria.png)
 
+Por último, puedes mirar las estadísticas de tu campaña clickando en **Ver estadísticas**. Aparecerá la siguiente pantalla
+
+![stats](docs/img/stats.png)
+
 Y hasta aquí la guía.Espero que te haya gustado y que disfrutes tu aventura.
-
-
-## Estructura del proyecto
-
-## Mapa de trazabilidad
-
 
 
 ## Documentación del codigo
 
 ### Aplicación ``` accounts ```
 
-#### Usuario personalizado ```models.py```
+### Usuario personalizado ```models.py```
 
 Se implementa un modelo ```CustomUser``` extendiendo ```Abstractuser``` 
 
@@ -153,7 +153,7 @@ Esto permite:
 - Mantener coherencia con la arquitectura de Django.
 - Facilitar la escalabilidad (posibles nuevos roles).
 
-#### Personalización del panel de administración  ```admin.py```
+### Personalización del panel de administración  ```admin.py```
 
 Se ha personalizado el panel de administración de Django para el modelo ```CustomUser``` mediante la extensión de ```UserAdmin```.
 
@@ -185,7 +185,7 @@ Para la creación de nuevos usuarios se implementa un formulario personalizado b
 Se extiende ```UserCreationForm``` en lugar de crear un formulario desde cero porque incluye validaciones seguras de contraseñas y reduce complejidad y posibles errores de seguridad.
 - El campo ```email``` se redefine como obligatorio en el formulario.
 
-#### Vistas de registro y login `views.py`
+### Vistas de registro y login `views.py`
 
 `def registro(request)` | <small> `registro/`</small>
 
@@ -217,9 +217,34 @@ Se extiende ```UserCreationForm``` en lugar de crear un formulario desde cero po
 - `request`: HttpRequest actual.
 
 **Devuelve:** Redirección a la vista de autenticación.
+campaña
+### Creación de grupos `crear_grupos.py`
 
-#### `crear_grupos.py`
+`Command(BaseCommand)`
 
+Configura los grupos de usuarios **DM** y **PLAYER** con los permisos necesarios sobre los modelos del juego.
+
+- `DM` – Grupo de directores de campaña.
+- `PLAYER` – Grupo de jugadores normales.
+
+- **Permisos asignados:**
+
+  - **DM:** Acceso a `Campana`, `Enemigo` y `RegistroAccion`. Esto permite:
+    - Crear, editar y eliminar campañas y enemigos.
+    - Registrar acciones de combate.
+
+  * **PLAYER:** Acceso a `Personaje`, `RegistroAccion` y `Campana`. Esto permite:
+    - Gestionar sus personajes.
+    - Registrar acciones propias en las campañas donde participa.
+    - Consultar información básica de la campaña.
+
+-  `def handle(*args, **kwargs)`
+  - Usa `Group.objects.get_or_create` para crear los grupos si no existen.
+  - Filtra los permisos por `ContentType` para cada modelo relevante.
+  - Asigna los permisos a cada grupo con `group.permissions.set()`.
+  - Imprime un mensaje de éxito.
+
+---
 ### Aplicación `game`
 
 ### Modelado del dominio RPG `models.py`
@@ -507,9 +532,27 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Vista de batalla, victoria, derrota o redirección tras acción.
 
-### Consultas ORM
 
-**`StatsCampanaView`**
+
+### Middleware de la aplicación `middleware.py`
+
+`RegistroAccesoCampanaMiddleware`
+
+Registra accesos de usuarios autenticados a vistas relacionadas con campañas.
+
+- `call()`:
+    - Guarda el tiempo de inicio de la petición.
+    - Llama a la vista correspondiente (`get_response`).
+    - Si el usuario está autenticado:
+      - Obtiene el nombre de la ruta actual, 
+      - Recupera la campaña de la URL si existe `pk`.
+      - Calcula tiempo de respuesta en milisegundos.
+      - Lo imprime
+    - Captura excepciones para que no rompan la petición.
+
+### Estadisticas (Consultas ORM) `analytics.py`
+
+**`StatsCampanaView`** | <small>`<int:pk>/stats/`</small>
 
 Vista basada en `TemplateView` que genera estadísticas completas de una campaña usando agregaciones y anotaciones avanzadas del ORM.
 
@@ -543,26 +586,12 @@ Sobre todos los registros de la campaña:
 - Daño total. `Sum`
 - Curación total. `Sum`
 
-
 A la hora de filtrar, se construye una queryset que:
 - Filtra solo ataques y curaciones.
 - Solo acciones exitosas.
 - Permite búsqueda opcional por nombre (personaje o enemigo).
 - Usa `select_related`, lo cual optimiza relaciones.
 
-
-#### `def aplicar_dano`
-
-**Función:** Aplica daño a un personaje reduciendo su vida actual directamente en base de datos.
-
-**Parámetros:**
-
-- `request`: HttpRequest con el valor de daño enviado por POST.
-- `pk`: Identificador del personaje afectado.
-
-**Devuelve:** Redirección a la vista de detalle del personaje tras actualizar la vida.
-
-Solo permite modificar personajes cuyo propietario sea el usuario autenticado.
 
 ## Dependencias
 
@@ -573,3 +602,233 @@ Solo permite modificar personajes cuyo propietario sea el usuario autenticado.
 - **sqlparse 0.5.5** – Procesamiento de consultas SQL.
 
 
+## Workflow del proyecto
+
+### Fase 1 - Inicialización y configuración del proyecto
+- Creación del proyecto Django y estructura inicial de aplicaciones.
+- Configuración de variables de entorno y conexión a PostgreSQL.
+- Implementación de Dockerfile y docker-compose con servicio web y base de datos.
+- Actualización del README inicial con instrucciones básicas de ejecución.
+
+### Fase 2 - Usuario personalizado y autenticación
+- Implementación del modelo de usuario personalizado y configuración en `settings.py`.
+- Creación de vistas de:
+  - Registro
+  - Inicio de sesión
+  - Cierre de sesión
+
+### Fase 3 — Modelado principal del sistema
+- Implementación de los modelos:
+  - Perfil de jugador (OneToOne con Usuario)
+  - Campaña
+  - Personaje
+  - Enemigo
+  - Registro de acción/tirada
+- Definición de relaciones:
+  - `ForeignKey`
+  - `OneToOne`
+  - `ManyToMany` con `related_name` y `related_query_name`
+- Definición de restricciones de unicidad y comportamiento coherente de `on_delete`.
+- Generación y aplicación de migraciones iniciales.
+- Creación de los grupos **DM** y **PLAYER** con asignación de permisos básicos.
+
+### Fase 4 — Uso avanzado del ORM (Consultas)
+- Uso de `Q objects` para filtrado complejo de registros.
+- Uso de `F expressions` para actualización segura de vida en base de datos.
+- Implementación de estadísticas.
+
+### Fase 5 – CRUD principal mediante Class-Based Views
+- CRUD completo de campañas con control de acceso por rol.
+- CRUD completo de personajes con restricción por propietario.
+- Aplicación de mixins integrados:
+  - `LoginRequiredMixin`
+  - `PermissionRequiredMixin`
+- Creación de un mixin personalizado para restringir edición al propietario.
+
+### Fase 6 — Lógica de juego y validaciones avanzadas
+- Implementación del sistema de tiradas de dados y ejecución de acciones (ataque y curación) mediante Function-Based Views, con registro automático en el historial.
+- Implementación de validaciones avanzadas en formularios:
+  - Vida actual no superior a vida máxima.
+  - Validación de nivel.
+  - Comprobación de pertenencia a campaña.
+  - Campos dinámicos según rol.
+
+### Fase 7 — Optimización de consultas
+- Aplicación de `select_related` y `prefetch_related` en vistas con relaciones múltiples para mejorar el rendimiento.
+
+### Fase 8 – Middleware
+- Creación de un middleware personalizado para registrar accesos a campañas.
+- Documentación del comportamiento del middleware y su finalidad.
+
+### Fase final — Documentación y cierre del proyecto
+- Finalización del README incluyendo:
+  - Explicación del workflow utilizado.
+  - Mapa de trazabilidad con requisitos.
+  - Documentación completa del proyecto.
+
+
+## Mapa de trazabilidad
+
+Se divide en requisitos funcionales(RF), que indican qué debe hacer el sistema, y no funcionales (RNF), especifican cómo debe comportarse o las restricciones que debe cumplir.
+
+**RF1**
+
+- **Requisito:** Registro y login de usuario
+- **Archivo/Módulo:** `accounts/models.py`, `accounts/forms.py`, `accounts/views.py`
+- **Evidencia:** `CustomUser`, `UserCreationForm`, `registro(request)`, `login_view(request)`; email único obligatorio y redirección tras registro.
+- Fase 2 – Usuario personalizado y autenticación
+
+**RF2**
+
+- **Requisito:** Gestión de roles DM / PLAYER
+- **Archivo/Módulo:** `accounts/crear_grupos.py`
+- Fase 3 – Modelado principal del sistema
+
+**RF3**
+
+- **Requisito:** CRUD de campañas
+- **Archivo/Módulo:** `game/views.py`, `game/forms.py`, `game/models.py`
+- Fase 5 – CRUD principal mediante Class-Based Views
+
+**RF4**
+
+- **Requisito:** CRUD de personajes
+- **Archivo/Módulo:** `game/views.py`, `game/forms.py`, `game/models.py`
+- Fase 5 – CRUD principal mediante Class-Based Views
+
+**RF5**
+
+- **Requisito:** CRUD de enemigos
+- **Archivo/Módulo:** `game/views.py`, `game/forms.py`, `game/models.py`
+- Fase 5 – CRUD principal mediante Class-Based Views
+
+**RF6**
+
+- **Requisito:** Lógica de combate (ataque y curación)
+- **Archivo/Módulo:** `game/views.py`, `game/forms.py`, `game/models.py`
+- Fase 6 – Lógica de juego y validaciones avanzadas
+
+**RF7**
+
+ **Requisito:** Visualización de estadísticas
+- **Archivo/Módulo:** `game/analytics.py`
+- Fase 4 – Uso avanzado del ORM (Consultas) / Fase 7 – Optimización de consultas
+
+**RF8**
+
+- **Requisito:** Sesiones y cookies de juego
+- **Archivo/Módulo:** `game/views.py`, templates
+- Parte de cookies no realizada.
+- Fase 6 – Lógica de juego y validaciones avanzadas
+
+**RNF1**
+
+- **Requisito:** Middleware propio y configuración
+- **Archivo/Módulo:** `game/middleware.py`, `config/settings.py`
+- Fase 8 – Middleware
+
+**RNF2**
+
+* **Requisito:** Mixins propios y de Django
+* **Archivo/Módulo:** `game/mixins.py`
+- Fase 5 – CRUD principal mediante Class-Based Views
+
+**RNF3**
+
+- **Requisito:** Relacionalidad y validaciones del ORM
+- **Archivo/Módulo:** `game/models.py`, `game/forms.py`
+- Fase 3 – Modelado principal del sistema / Fase 6 – Lógica de juego y validaciones avanzadas
+
+**RNF4**
+
+- **Requisito:** Entorno Docker + PostgreSQL operativo
+- **Archivo/Módulo:** `docker-compose.yml`, `.env`
+- Fase 1 – Inicialización y configuración del proyecto
+
+## Estructura del proyecto
+```
+accounts
+├─ management
+│  └─ commands
+│     ├─ __init__.py
+│     ├─ crear_grupos.py
+│     └─ init_.py
+├─ static/accounts
+│  ├─ css
+│  │  └─ styles.css
+│  └─ img
+│     └─ logo_icon.jpeg
+├─ templates/accounts
+│  ├─ login.html
+│  ├─ registro.html
+│  └─ base.html
+├─ __init__.py
+├─ admin.py
+├─ apps.py
+├─ forms.py
+├─ models.py
+├─ tests.py
+├─ urls.py
+└─ views.py
+
+config
+├─ __init__.py
+├─ asgi.py
+├─ settings.py
+├─ urls.py
+└─ wsgi.py
+
+docs/img
+├─ atacar-enemigo.png
+├─ campana-creacion.png
+├─ campana-ejemplo.png
+├─ campana-no-pj.png
+├─ curarse.png
+├─ Enemigo-Ejemplo.png
+├─ historial-combate.png
+├─ inicio-login.png
+├─ no-campana.png
+├─ Personaje-Ejemplo.png
+├─ registro.png
+├─ stats.png
+└─ victoria.png
+
+game
+├─ static/game/css
+│  └─ styles.css
+├─ templates/game
+│  ├─ batalla.html
+│  ├─ campana_confirm_delete.html
+│  ├─ campana_form.html
+│  ├─ campana.html
+│  ├─ crear_campana.html
+│  ├─ crear_personaje.html
+│  ├─ derrota.html
+│  ├─ enemigo_confirm_delete.html
+│  ├─ enemigo_form.html
+│  ├─ enemigo_list.html
+│  ├─ personaje_confirm_delete.html
+│  ├─ personaje_form.html
+│  ├─ personaje_list.html
+│  ├─ stats.html
+│  └─ victoria.html
+├─ __init__.py
+├─ admin.py
+├─ analytics.py
+├─ apps.py
+├─ forms.py
+├─ middleware.py
+├─ mixins.py
+├─ models.py
+├─ tests.py
+├─ urls.py
+└─ views.py
+
+Raíz del proyecto
+├─ .gitignore
+├─ docker-compose.yml
+├─ Dockerfile
+├─ manage.py
+├─ README.md
+└─ requirements.txt
+```
