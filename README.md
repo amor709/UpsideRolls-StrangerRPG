@@ -28,7 +28,6 @@ SECRET_KEY=clave_secreta
 DEBUG=True
 ```
 
-
 ### Paso 4 - Construir y levantar los contenedores
 ```
 docker compose up --build -d
@@ -38,8 +37,6 @@ docker compose up --build -d
 ```
 http://localhost:8000
 ```
-
-### Dependencias
 
 ## Vamos, pruebalo por ti mismo!
 
@@ -65,7 +62,7 @@ Procedemos a rellenar los campos que nos solicita el formulario y pulsamos en **
 
 Aquí veremos que todavía no tenemos ninguna campaña creada, así que, ¿a qué esperamos? ¡Vamos a crear una!
 
-Rellenamos ...
+Rellenamos los campos que nos pide.
 
 ![campana-creacion](docs/img/campana-creacion.png)
 
@@ -126,6 +123,10 @@ Y hasta aquí la guía.Espero que te haya gustado y que disfrutes tu aventura.
 
 ## Estructura del proyecto
 
+## Mapa de trazabilidad
+
+
+
 ## Documentación del codigo
 
 ### Aplicación ``` accounts ```
@@ -133,12 +134,6 @@ Y hasta aquí la guía.Espero que te haya gustado y que disfrutes tu aventura.
 #### Usuario personalizado ```models.py```
 
 Se implementa un modelo ```CustomUser``` extendiendo ```Abstractuser``` 
-
-Elegimos este enfoque en vez de AbstractBaseUser porque:
-
-```
-Preguntar Luis
-```
 
 - **Email único** 
 
@@ -159,9 +154,6 @@ Esto permite:
 - Mantener coherencia con la arquitectura de Django.
 - Facilitar la escalabilidad (posibles nuevos roles).
 
-```
-Preguntar Luis
-```
 #### Personalización del panel de administración  ```admin.py```
 
 Se ha personalizado el panel de administración de Django para el modelo ```CustomUser``` mediante la extensión de ```UserAdmin```.
@@ -196,7 +188,7 @@ Se extiende ```UserCreationForm``` en lugar de crear un formulario desde cero po
 
 #### Vistas de registro y login `views.py`
 
-`def registro(request)`
+`def registro(request)` | <small> `registro/`</small>
 
 **Función:** Gestiona el registro de nuevos usuarios.
 
@@ -207,7 +199,7 @@ Se extiende ```UserCreationForm``` en lugar de crear un formulario desde cero po
 **Devuelve:** Formulario renderizado o redirección tras registro exitoso.
 
 
-`def login_view(request)`
+`def login_view(request)` | <small> `login/`</small>
 
 **Función:** Autentica usuarios existentes.
 
@@ -217,7 +209,7 @@ Se extiende ```UserCreationForm``` en lugar de crear un formulario desde cero po
 **Devuelve:** Formulario de login o redirección.
 
 
-`def logout_view(request)`
+`def logout_view(request)` | <small> `logout/`</small>
 
 **Función:** Cierra la sesión activa.
 
@@ -229,7 +221,7 @@ Se extiende ```UserCreationForm``` en lugar de crear un formulario desde cero po
 
 #### `crear_grupos.py`
 
-## Aplicación `game`
+### Aplicación `game`
 
 ### Modelado del dominio RPG `models.py`
 
@@ -239,8 +231,8 @@ Se implementa un modelo `PerfilJugador` vinculado mediante relación OneToOne co
 
 Este enfoque permite extender la información del usuario sin modificar el modelo de autenticación.
 
-Con esto conseguimos 
-- Separar datos de autenticación de datos de juego pa
+Con esto conseguimos:
+- Separar datos de autenticación de datos de juego
 - Mantener modularidad y escalabilidad.
 
 
@@ -266,8 +258,8 @@ Esta relacionado con:
 Es una entidad jugable asociada a un usuario dentro de una campaña.
 
 Se relacionad de la siguiente forma:
-- `propietario` > Usuario (`CASCADE`)
-- `campana` > Campaña (`CASCADE`)
+- `propietario` - Usuario (`CASCADE`)
+- `campana` - Campaña (`CASCADE`)
 
 Si se elimina la campaña o el usuario, el personaje desaparece automáticamente.
 
@@ -346,7 +338,6 @@ Permite consultar acciones relacionadas sin abandonar el modelo principal.
 
 ### Formularios avanzados `forms.py`
 
-
 `PerfilJugadorForm`
 Asociado al modelo `PerfilJugador`, impide la creación de perfiles asociados a terceros.
 - Se recibe el usuario por parámetro `user`.
@@ -364,7 +355,7 @@ Formulario para creación y edición de campañas.
 Formulario para la creación de personaje
 - `clean_vida_actual()` garantiza que la vida actual no supere vida máxima.
 - `clean_nivel()` garantiza que el nivel esté restringido entre 1 y 20.
-- `clean()` garantiza que solo pueda crearse personaje en campañas donde el usuario participa y la valida unicidad de nombre dentro de la campaña (refuerzo adicional a `unique_together`).
+- `clean()` garantiza que el nombre del personaje sea único dentro de la campaña y previene duplicados dentro de la misma campaña.
 
 `EnemigoForm`
 
@@ -402,7 +393,7 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 ### Vistas de game `views.py`
 
-`class CampanaView`
+`class CampanaView` | <small> `/`</small>
 
 **Función:** Muestra la campaña activa.
 
@@ -410,7 +401,7 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Template con la campaña activa.
 
-`class CampanaCreateView`
+`class CampanaCreateView` | <small> `crear/`</small>
 
 **Función:** Crea una nueva campaña.
 
@@ -419,7 +410,7 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Formulario o redirección.
 
-`class CampanaUpdateView`
+`class CampanaUpdateView` | <small> `editar/`</small>
 
 **Función:** Edita la campaña activa (solo DM).
 
@@ -428,7 +419,7 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Formulario o redirección.
 
-`class CampanaDeleteView`
+`class CampanaDeleteView` | <small> `borrar/`</small>
 
 **Función:** Elimina la campaña activa (solo DM).
 
@@ -436,24 +427,24 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Confirmación o redirección.
 
-`class PersonajeListView`
+`class PersonajeListView` | <small> `personajes/`</small>
 
 **Función:** Lista personajes de la campaña activa.
 
-- `get_queryset()` → Filtra personajes según la campaña actual.
+- `get_queryset()`: Filtra personajes según la campaña actual.
 
 **Devuelve:** Listado de personajes.
 
-`class PersonajeCreateView`
+`class PersonajeCreateView` | <small> `personaje/crear/`</small>
 
 **Función:** Crea un personaje asociado al usuario y a la campaña.
 
 - Aqui tambien se implementa`dispatch()` y `get_success_url()`
-- `form_valid()` → Asigna automáticamente propietario y campaña antes de guardar.
+- `form_valid()`: Asigna automáticamente propietario y campaña antes de guardar.
 
 **Devuelve:** Formulario o redirección.
 
-`class PersonajeUpdateView`
+`class PersonajeUpdateView` | <small> `personaje/<int:pk>/editar/`</small>
 
 **Función:** Edita un personaje (solo propietario).
 
@@ -461,7 +452,7 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Formulario o redirección.
 
-`class PersonajeDeleteView`
+`class PersonajeDeleteView` | <small> `personaje/<int:pk>/borrar/`</small>
 
 **Función:** Elimina un personaje (solo propietario).
 
@@ -470,33 +461,33 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 **Devuelve:** Confirmación o redirección.
 
 
-`class EnemigoListView`
+`class EnemigoListView` | <small>`enemigos/`</small>
 
 **Función:** Lista enemigos de la campaña (solo DM).
 
-- `get_queryset()` Filtra enemigos según campaña activa.
+- `get_queryset()`: Filtra enemigos según campaña activa.
 
 **Devuelve:** Listado de enemigos.
 
-`class EnemigoCreateView`
+`class EnemigoCreateView` | <small>`enemigos/crear/`</small>
 
 **Función:** Crea enemigo asociado a la campaña.
 
-- `get_form_kwargs()` Inyecta la campaña al formulario.
+- `get_form_kwargs()`: Inyecta la campaña al formulario.
 - `get_success_url()` 
 
 **Devuelve:** Formulario o redirección.
 
-`class EnemigoUpdateView`
+`class EnemigoUpdateView` | <small>`enemigo/<int:pk>/editar/`</small>
 
 **Función:** Edita enemigo (solo DM).
 
-- `get_form_kwargs()` Reinyecta la campaña.
+- `get_form_kwargs()`: Reinyecta la campaña.
 - `get_success_url()`
 
 **Devuelve:** Formulario o redirección.
 
-`class EnemigoDeleteView`
+`class EnemigoDeleteView` | <small>`enemigo/<int:pk>/borrar/` </small>
 
 **Función:** Elimina enemigo (solo DM).
 
@@ -504,7 +495,7 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Confirmación o redirección.
 
-`def batalla_view(request)`
+`def batalla_view(request)` | <small>  `batalla/`</small>
 
 **Función:** Gestiona la lógica del combate por turnos.
 
@@ -517,13 +508,11 @@ Este formulario adapta su comportamiento según el usuario y la campaña
 
 **Devuelve:** Vista de batalla, victoria, derrota o redirección tras acción.
 
-### ORM
+### Consultas ORM
 
 **`StatsCampanaView`**
 
 Vista basada en `TemplateView` que genera estadísticas completas de una campaña usando agregaciones y anotaciones avanzadas del ORM.
-
-
 
 Para optimizar las consultas se utilizan:
 - `select_related('dm')` evita consultas extra para el director.
@@ -563,7 +552,6 @@ A la hora de filtrar, se construye una queryset que:
 - Usa `select_related`, lo cual optimiza relaciones.
 
 
-
 #### `def aplicar_dano`
 
 **Función:** Aplica daño a un personaje reduciendo su vida actual directamente en base de datos.
@@ -577,7 +565,12 @@ A la hora de filtrar, se construye una queryset que:
 
 Solo permite modificar personajes cuyo propietario sea el usuario autenticado.
 
+## Dependencias
 
-
+- **Django 6.0.2** – Framework web principal.
+- **asgiref 3.11.1** – Soporte ASGI para Django.
+- **psycopg2-binary 2.9.11** – Conector para PostgreSQL.
+- **python-dotenv 1.2.1** – Manejo de variables de entorno.
+- **sqlparse 0.5.5** – Procesamiento de consultas SQL.
 
 
