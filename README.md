@@ -40,7 +40,7 @@ http://localhost:8000
 
 ## Vamos, pruebalo por ti mismo!
 
-Ya que te has interesado lo suficiente como para llegar hasta aquí vamos a hacer una pequeña guía para que entiendas cómo funciona la aplicación.
+Ya que te has interesado lo suficiente como para llegar hasta aquí vamos a hacer una pequeña guía para que entiendas cómo funciona la aplicación, como usuario DM, Quien tiene acceso a crear, editar y eliminar campañas.
 
 Primero, al ingresar al enlace desde tu navegador, encontrarás la pantalla de inicio de sesión.
 
@@ -118,7 +118,6 @@ Cuando derrotamos a todos los enemigos, recibiremos una pantalla indicando que h
 ![victoria](docs/img/victoria.png)
 
 Y hasta aquí la guía.Espero que te haya gustado y que disfrutes tu aventura.
-
 
 
 ## Estructura del proyecto
