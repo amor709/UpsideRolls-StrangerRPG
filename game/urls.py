@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
+from .analytics import StatsCampanaView
 app_name = 'game'
 
 urlpatterns = [
+    path('<int:pk>/stats/', StatsCampanaView.as_view(), name='stats_campana'),
     path('', views.CampanaView.as_view(), name='campana'),
     path('crear/', views.CampanaCreateView.as_view(), name='campana_create'),
     path('editar/', views.CampanaUpdateView.as_view(), name='campana_update'),
