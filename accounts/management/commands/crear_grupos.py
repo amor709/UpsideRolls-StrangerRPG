@@ -33,5 +33,5 @@ class Command(BaseCommand):
         player_group.permissions.set(player_perms)
 
         self.stdout.write(
-            self.style.SUCCESS('✅ Grupos DM y PLAYER configurados correctamente.')
+            self.style.SUCCESS('Grupos DM y PLAYER configurados correctamente.')
         )
