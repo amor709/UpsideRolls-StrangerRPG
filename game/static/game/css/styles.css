@@ -1,362 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Share+Tech+Mono&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Tema */
+.light-mode {
+    background-color: #ffffff;
+    color: #222;
 }
 
-body {
-    background-color: #0a0a0a;
-    color: #e0e0e0;
-    font-family: 'Share Tech Mono', monospace;
-    min-height: 100vh;
-    background-image: radial-gradient(ellipse at top, #1a0a2e 0%, #0a0a0a 60%);
-    line-height: 1.6;
+.dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
 }
 
-nav {
-    background-color: #0d0d0d;
-    padding: clamp(0.8rem, 2vw, 1.5rem) clamp(1rem, 4vw, 3rem);
-    border-bottom: 2px solid #cc0000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    top: 0;
-    z-index: 100;
+.dark-mode nav {
+    background-color: #1f1f1f;
 }
 
-.nav-brand {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.nav-brand a {
-    font-family: 'Creepster', cursive;
-    font-size: clamp(1.4rem, 4vw, 1.8rem);
-    color: #cc0000;
-    text-decoration: none;
-    text-shadow: 0 0 12px #cc0000;
-    letter-spacing: 0.1em;
-}
-
-.nav-subtitle {
-    font-size: clamp(0.6rem, 2vw, 0.75rem);
-    color: #555;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-top: 0.2rem;
-}
-
-.nav-toggle {
-    display: none;
-    font-size: clamp(1.4rem, 5vw, 2rem);
-    color: #cc0000;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.nav-toggle:hover {
-    background: rgba(204, 0, 0, 0.1);
-}
-
+/* Navbar y toggle de tema */
 .nav-links {
     display: flex;
     align-items: center;
-    gap: clamp(1rem, 3vw, 2rem);
+    gap: 1rem;
 }
 
-.nav-links a, .nav-user {
+.theme-toggle {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #aaa;
-    text-decoration: none;
-    font-size: clamp(0.85rem, 2.5vw, 1rem);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
     padding: 0.4rem 0.8rem;
     border-radius: 4px;
     transition: all 0.2s ease;
 }
 
-.nav-links a:hover {
+.theme-toggle:hover {
     color: #cc0000;
     text-shadow: 0 0 8px #cc0000;
-    background: rgba(204, 0, 0, 0.1);
-}
-
-.nav-user {
-    color: #cc0000;
-    background: rgba(204, 0, 0, 0.1);
-    border: 1px solid #440000;
-}
-
-main {
-    min-height: calc(100vh - 140px);
-    padding: clamp(1rem, 4vw, 2rem);
-}
-
-h1 {
-    font-family: 'Creepster', cursive;
-    font-size: clamp(1.8rem, 6vw, 3rem);
-    color: #cc0000;
-    text-shadow: 0 0 20px #cc0000, 0 0 40px #880000;
-    margin-bottom: clamp(1rem, 4vw, 2rem);
-    letter-spacing: 0.1em;
-    text-align: center;
-}
-
-.auth-container {
-    max-width: clamp(320px, 90vw, 450px);
-    margin: clamp(2rem, 8vw, 6rem) auto;
-    padding: clamp(1.5rem, 6vw, 3rem);
-    background: rgba(20, 0, 0, 0.85);
-    border: 1px solid #cc0000;
-    border-radius: 8px;
-    box-shadow: 0 0 30px rgba(204, 0, 0, 0.3);
-}
-
-.auth-container .form-group {
-    margin-bottom: clamp(1rem, 4vw, 1.8rem);
-}
-
-.auth-container label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #ccc;
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: clamp(0.8rem, 3vw, 1rem) 1rem;
-    background: #1a1a1a;
-    border: 1px solid #440000;
-    border-radius: 6px;
-    color: #e0e0e0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(0.9rem, 3vw, 1rem);
-    transition: all 0.2s ease;
-}
-
-input:focus {
-    outline: none;
-    border-color: #cc0000;
-    box-shadow: 0 0 12px rgba(204, 0, 0, 0.4);
-}
-
-.auth-container .error {
-    color: #ff4444;
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: rgba(255, 68, 68, 0.1);
-    border-radius: 4px;
-}
-
-button[type="submit"] {
-    width: 100%;
-    padding: clamp(0.9rem, 3vw, 1.1rem);
-    background: #cc0000;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-family: 'Creepster', cursive;
-    font-size: clamp(1rem, 3vw, 1.3rem);
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-}
-
-button[type="submit"]:hover {
-    background: #ff1a1a;
-    box-shadow: 0 0 20px rgba(255, 26, 26, 0.5);
-    transform: translateY(-1px);
-}
-
-.footer {
-    background: #0a0a0a;
-    border-top: 1px solid #440000;
-    margin-top: auto;
-}
-
-.footer-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 6vw, 4rem);
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 2rem;
-    align-items: center;
-    justify-items: center;
-}
-
-@media (max-width: 768px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        text-align: center;
-    }
-}
-
-.footer-left {
-    font-size: clamp(0.85rem, 2vw, 1rem);
-    color: #888;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-}
-
-.footer-center {
-    color: #ccc;
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    letter-spacing: 1px;
-    font-weight: 400;
-    white-space: nowrap;
-}
-
-.footer-right {
-    display: flex;
-    gap: clamp(1rem, 4vw, 2.5rem);
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.footer-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #fff !important;
-    text-decoration: none;
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
-    font-weight: 500;
-    letter-spacing: 1px;
-    padding: clamp(0.6rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem);
-    border: 1px solid transparent;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    white-space: nowrap;
-}
-
-.footer-link i {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
-}
-
-.footer-link:hover,
-.footer-link:hover i {
-    color: #cc0000 !important;
-    border-color: #440000;
-    text-shadow: 0 0 8px rgba(204, 0, 0, 0.5);
-    transform: translateY(-2px);
-}
-
-.nav-toggle {
-    display: none;
-}
-
-
-.personajes-stats table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-}
-
-.personajes-stats th,
-.personajes-stats td {
-    border: 1px solid #440000;
-    padding: 0.8rem;
-    text-align: center;
-}
-
-.personajes-stats th {
-    background-color: #1a0a2e;
-    color: #cc0000;
-    font-family: 'Creepster', cursive;
-}
-
-.personajes-stats tr:nth-child(even) {
-    background-color: rgba(204, 0, 0, 0.05);
-}
-
-.campana-stats ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.campana-stats li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #440000;
-    font-family: 'Share Tech Mono', monospace;
-}
-
-h2 {
-    font-family: 'Creepster', cursive;
-    color: #cc0000;
-    text-shadow: 0 0 10px #cc0000;
-    margin-bottom: 1rem;
-}
-
-@media (max-width: 900px) {
-    .nav-links {
-        gap: 1rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-toggle {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: #0d0d0d;
-        flex-direction: column;
-        padding: 1rem;
-        border-top: 1px solid #440000;
-        gap: 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .nav-links a,
-    .nav-links .nav-user {
-        width: 100%;
-        text-align: center;
-        padding: 1rem;
-        margin: 0.2rem 0;
-        border-radius: 6px;
-    }
-
-    main {
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    nav {
-        padding: 1rem;
-    }
-
-    .auth-container {
-        margin: 2rem 0.5rem;
-        padding: 1.5rem;
-    }
-}
-
-@container (min-width: 400px) {
-    .auth-container {
-        padding: 2.5rem;
-    }
+    background: rgba(204,0,0,0.1);
 }

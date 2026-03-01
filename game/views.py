@@ -9,6 +9,12 @@ from .mixins import SoloPropietarioMixin, SoloDMMixin
 import random
 from django.contrib.auth.decorators import login_required
 
+
+def cambiar_tema(request):
+    tema = request.GET.get('tema', 'claro')
+    response = redirect(request.META.get('HTTP_REFERER', '/'))
+    response.set_cookie('tema', tema, max_age=60*60*24*365)
+    return response
 class CampanaView(LoginRequiredMixin, TemplateView):
     template_name = 'game/campana.html'
 

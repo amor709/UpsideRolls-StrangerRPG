@@ -16,4 +16,5 @@ urlpatterns = [
     path('enemigo/<int:pk>/editar/', views.EnemigoUpdateView.as_view(), name='enemigo_update'),
     path('enemigo/<int:pk>/borrar/', views.EnemigoDeleteView.as_view(), name='enemigo_delete'),
     path('batalla/', views.batalla_view, name='batalla'),
+    path('tema/', views.cambiar_tema, name='cambiar_tema'),
 ]
