@@ -11,7 +11,7 @@
     <link rel="icon" href="{% static 'accounts/img/logo_icon.jpeg' %}" type="image/x-icon">
 </head>
 
-<body class="{% if tema_actual == 'oscuro' %}dark-mode{% else %}light-mode{% endif %}">
+<body>
 
     <nav>
         <div class="nav-brand">
@@ -24,16 +24,6 @@
         </div>
 
         <div class="nav-links" id="nav-links">
-
-            <a href="{% url 'game:cambiar_tema' %}?tema={% if tema_actual == 'oscuro' %}claro{% else %}oscuro{% endif %}"
-               class="theme-toggle">
-                {% if tema_actual == 'oscuro' %}
-                    <i class="bi bi-sun-fill dange"></i>
-                {% else %}
-                    <i class="bi bi-moon-fill"></i>
-                {% endif %}
-            </a>
-
             {% if user.is_authenticated %}
                 <span class="nav-user">{{ user.username }}</span>
                 <a href="{% url 'accounts:logout' %}">Salir</a>
