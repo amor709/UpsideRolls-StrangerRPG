@@ -11,7 +11,12 @@
         {% if user == campana.dm %}
             <a href="{% url 'game:campana_update' %}" class="btn btn-primary">Editar campaña</a>
             <a href="{% url 'game:campana_delete' %}" class="btn btn-primary">Borrar campaña</a>
+            <a href="{% url 'game:enemigo_list' %}" class="btn btn-primary">Enemigos</a>
         {% endif %}
+        <a href="{% url 'game:personaje_list' %}" class="btn btn-primary">Personajes</a>
+        <a href="{% url 'game:batalla' %}" class="btn btn-primary">A la batalla</a>
+
+
 
     {% else %}
         <p>No hay campaña creada por el momento.</p>

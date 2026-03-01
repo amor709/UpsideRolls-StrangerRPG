@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Derrota | UpsideRolls{% endblock %}
+
+{% block content %}
+
+<div class="defeat-container">
+
+    <div class="defeat-box">
+        <h1 class="defeat-title">
+            <i class="bi bi-skull-fill"></i> DERROTA
+        </h1>
+
+        <p class="defeat-text">
+            Todos los héroes han caído en combate.
+        </p>
+
+        <p class="defeat-subtext">
+            La oscuridad ha vencido... esta vez.
+        </p>
+
+        <div class="defeat-actions">
+            <a href="{% url 'game:campana' %}" class="btn-primary">
+                Volver a la campaña
+            </a>
+
+            <a href="{% url 'game:batalla' %}" class="btn-secondary">
+                Ver batalla
+            </a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}Formulario Enemigo{% endblock %}
+{% block title %}Borrar Enemigo{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>{% if form.instance.pk %}Editar Enemigo{% else %}Crear Enemigo{% endif %}</h2>
+    <h2>Confirmar borrado de enemigo</h2>
+    <p>¿Estás seguro de que deseas eliminar al enemigo <strong>{{ object.nombre }}</strong> de la campaña <strong>{{ object.campana.titulo }}</strong>?</p>
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-danger">Borrar</button>
         <a href="{% url 'game:enemigo_list' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>

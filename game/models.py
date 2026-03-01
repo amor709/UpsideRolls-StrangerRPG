@@ -40,6 +40,9 @@ class Campana(models.Model):
     )
     estado = models.CharField(max_length=20, choices=ESTADOS, default='activa')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    turno_actual = models.CharField(max_length=20, default='personajes')
+    indice_turno = models.IntegerField(default=0)
+    batalla_activa = models.BooleanField(default=True)
 
     def __str__(self):
         return self.titulo

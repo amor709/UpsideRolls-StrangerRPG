@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Formulario Personaje{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if form.instance.pk %}Editar Personaje{% else %}Crear Personaje{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{% url 'game:personaje_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
